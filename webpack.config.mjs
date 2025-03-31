@@ -5,6 +5,7 @@ import WasmPackPlugin from "@wasm-tool/wasm-pack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import fs from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -65,10 +66,21 @@ const config = {
 		open: true,
 		hot: false,
 		liveReload: false,
+		allowedHosts: [
+			'*'
+		],
+		server: {
+			type: 'https',
+			options: {
+				key: fs.readFileSync(path.join(__dirname, './moq-rs-key.pem')),
+				cert: fs.readFileSync(path.join(__dirname, './moq-rs-crt.pem')),
+			}
+		}
 	},
 	optimization: {
 		sideEffects: true,
 	},
+
 };
 
 export default config;

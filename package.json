@@ -34,8 +34,17 @@
 			"import": "./dist/meet/ui.js"
 		}
 	},
-	"sideEffects": ["./dist/rust.*", "./dist/snippets/*", "./dist/*/element.js", "./dist/*/ui.js"],
-	"files": ["dist", "README.md", "LICENSE*"],
+	"sideEffects": [
+		"./dist/rust.*",
+		"./dist/snippets/*",
+		"./dist/*/element.js",
+		"./dist/*/ui.js"
+	],
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE*"
+	],
 	"scripts": {
 		"build": "npm run build:prod && npm run build:tsc",
 		"build:prod": "wasm-pack build --out-dir ../dist moq-web --release --scope kixelated --out-name rust",
@@ -46,8 +55,9 @@
 		"fix": "biome check --write"
 	},
 	"dependencies": {
+		"@shoelace-style/shoelace": "^2.19.1",
 		"comlink": "^4.4.2",
-		"@shoelace-style/shoelace": "^2.19.1"
+		"fs": "^0.0.1-security"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.3",

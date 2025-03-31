@@ -32,11 +32,14 @@ all:
 
 # Run a localhost relay server
 relay:
-	cargo run --bin moq-relay -- --bind "[::]:4443" --tls-self-sign "localhost:4443" --cluster-node "localhost:4443" --tls-disable-verify
+	# cargo run --bin moq-relay -- --bind "localhost:4443" --tls-self-sign "localhost:4443" --cluster-node "localhost:4443" --tls-disable-verify
+	cargo run --bin moq-relay -- --bind "0.0.0.0:4443" --tls-cert "/home/full/path/to/moq-rs-crt.pem"  --tls-key "/home/full/path/to/moq-rs-key.pem" --cluster-node "0.0.0.0:4443" --tls-disable-verify
+
 
 # Run a localhost leaf server, connecting to the relay server
 leaf:
-	cargo run --bin moq-relay -- --bind "[::]:4444" --tls-self-sign "localhost:4444" --cluster-node "localhost:4444" --cluster-root "localhost:4443" --tls-disable-verify
+	# cargo run --bin moq-relay -- --bind "[::]:4444" --tls-self-sign "localhost:4444" --cluster-node "localhost:4444" --cluster-root "localhost:4443" --tls-disable-verify
+	cargo run --bin moq-relay -- --bind "0.0.0.0:4444" --tls-cert "/home/full/path/to/moq-rs.crt.pem" --tls-key "/home/full/path/to/moq-rs-key.pem" --cluster-node "0.0.0.0:4444" --cluster-root "domain.here:4443" --tls-disable-verify
 
 # Run a cluster of relay servers
 cluster:
@@ -81,7 +84,8 @@ pub name:
 		-i "dev/{{name}}.fmp4" \
 		-c copy \
 		-f mp4 -movflags cmaf+separate_moof+delay_moov+skip_trailer+frag_every_frame \
-		- | cargo run --bin moq-karp -- publish "http://localhost:4443/demo/{{name}}"
+		- | cargo run --bin moq-karp -- publish "http://domain.here:4443/demo/{{name}}"
+#		- | cargo run --bin moq-karp -- publish "http://localhost:4443/demo/{{name}}"
 
 # Publish a video using ffmpeg directly from moq-karp to the localhost
 pub-serve name:
@@ -94,7 +98,8 @@ pub-serve name:
 		-i "dev/{{name}}.fmp4" \
 		-c copy \
 		-f mp4 -movflags cmaf+separate_moof+delay_moov+skip_trailer+frag_every_frame \
-		- | cargo run --bin moq-karp -- --bind "[::]:4443" --tls-self-sign "localhost:4443" --tls-disable-verify serve "/demo/{{name}}"
+		- | cargo run --bin moq-karp -- --bind "domain.here:4443" --tls-key "/home/full/path/to/moq-rs.key.pem" --tls-crt "/home/full/path/to/moq-rs.crt.pem" --tls-disable-verify serve "/demo/{{name}}"
+#		- | cargo run --bin moq-karp -- --bind "[::]:4443" --tls-self-sign "localhost:4443" --tls-disable-verify serve "/demo/{{name}}"
 
 # Run the web server
 web:
@@ -102,11 +107,13 @@ web:
 
 # Publish the clock broadcast
 clock-pub:
-	cargo run --bin moq-clock -- "http://localhost:4443" publish
+	cargo run --bin moq-clock -- "http://domain.here:4443" publish --tls-disable-verify
+#	cargo run --bin moq-clock -- "http://localhost:4443" publish
 
 # Subscribe to the clock broadcast
 clock-sub:
-	cargo run --bin moq-clock -- "http://localhost:4443" subscribe
+	cargo run --bin moq-clock -- "http://domain.here.org:4443" subscribe --tls-disable-verify
+#	cargo run --bin moq-clock -- "http://localhost:4443" subscribe
 
 # Run the CI checks
 check:
