@@ -79,13 +79,13 @@ pub name:
 	cargo build --bin moq-karp
 
 	# Run ffmpeg and pipe the output to moq-karp
-	ffmpeg -hide_banner -v quiet \
-		-stream_loop -1 -re \
-		-i "dev/{{name}}.fmp4" \
-		-c copy \
-		-f mp4 -movflags cmaf+separate_moof+delay_moov+skip_trailer+frag_every_frame \
-		- | cargo run --bin moq-karp -- publish "http://domain.here:4443/demo/{{name}}"
-#		- | cargo run --bin moq-karp -- publish "http://localhost:4443/demo/{{name}}"
+	ffmpeg -hide_banner \
+		-f x11grab -i :0.0 \
+		-c:v libx264 -preset veryfast -tune zerolatency \
+		-pix_fmt yuv420p \
+		-f mp4 \
+		-movflags +frag_keyframe+empty_moov+default_base_moof \
+		- | cargo run --bin moq-karp -- publish "https://domain.here:4443/demo/{{name}}"
 
 # Publish a video using ffmpeg directly from moq-karp to the localhost
 pub-serve name:
