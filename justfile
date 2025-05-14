@@ -112,8 +112,16 @@ clock-pub:
 
 # Subscribe to the clock broadcast
 clock-sub:
-	cargo run --bin moq-clock -- "http://domain.here.org:4443" subscribe --tls-disable-verify
+	cargo run --bin moq-clock -- "http://domain.here:4443" subscribe --tls-disable-verify
 #	cargo run --bin moq-clock -- "http://localhost:4443" subscribe
+
+message-pub:
+	cargo build --bin moq-messaging
+	cargo run --bin moq-messaging -- "http://domain.here:4443" publish
+
+message-sub:
+	cargo build --bin moq-messaging
+	cargo run --bin moq-messaging -- "http://domain.here:4443" subscribe
 
 # Run the CI checks
 check:
