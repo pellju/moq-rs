@@ -1339,6 +1339,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "moq-messaging"
+version = "0.5.26"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "clap",
+ "moq-native",
+ "moq-transfork",
+ "tokio",
+ "tracing",
+ "url",
+]
+
+[[package]]
 name = "moq-native"
 version = "0.6.8"
 dependencies = [

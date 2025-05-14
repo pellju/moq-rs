@@ -3,6 +3,7 @@ members = [
 	"moq-transfork",
 	"moq-relay",
 	"moq-clock",
+	"moq-messaging",
 	"moq-native",
 	"moq-karp",
 	"moq-karp-cli",
